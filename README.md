@@ -65,6 +65,30 @@ docker compose up --build
 
 ### Rodando os testes
 
+## Migrações do banco (Alembic)
+
+O projeto usa [Alembic](https://alembic.sqlalchemy.org/) para versionar mudanças no schema do banco — nada é criado com `create_all()` em produção.
+
+**Configurando o banco pela primeira vez:**
+```bash
+alembic upgrade head
+```
+
+**Depois de alterar um model** (`app/models/models.py`), gere uma nova migração:
+```bash
+alembic revision --autogenerate -m "descricao da mudanca"
+```
+
+Revise o arquivo gerado em `migrations/versions/` — o autogenerate é bom, mas não é infalível (renomear uma coluna, por exemplo, costuma aparecer como "apagar + criar coluna", e às vezes vale ajustar manualmente). Depois, aplique:
+```bash
+alembic upgrade head
+```
+
+**Desfazendo a última migração** (se precisar voltar atrás):
+```bash
+alembic downgrade -1
+```
+
 ```bash
 pytest -v
 ```
