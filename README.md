@@ -1,5 +1,7 @@
 # Price Tracker API
 
+![CI](https://github.com/CauaMolinaro/Price-Tracker/actions/workflows/ci.yml/badge.svg)
+
 API REST em **Python (FastAPI)** para monitorar o histórico de preços de produtos (hardware, jogos, eletrônicos) e disparar alertas quando o preço cai abaixo de um valor alvo.
 
 Projeto construído do zero como peça de portfólio, com foco em modelagem de banco de dados, queries SQL, design de API e boas práticas de backend.
@@ -65,6 +67,10 @@ docker compose up --build
 
 ### Rodando os testes
 
+```bash
+pytest -v
+```
+
 ## Migrações do banco (Alembic)
 
 O projeto usa [Alembic](https://alembic.sqlalchemy.org/) para versionar mudanças no schema do banco — nada é criado com `create_all()` em produção.
@@ -87,10 +93,6 @@ alembic upgrade head
 **Desfazendo a última migração** (se precisar voltar atrás):
 ```bash
 alembic downgrade -1
-```
-
-```bash
-pytest -v
 ```
 
 ### Rodando a coleta de preços manualmente
