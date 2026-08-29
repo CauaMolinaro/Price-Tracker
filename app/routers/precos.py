@@ -1,10 +1,7 @@
 """
-Endpoints relacionados a preços e análises.
+Endpoints relacionados a preços e análises."""
 
-Aqui ficam as queries mais "ricas" do projeto — bom lugar pra mostrar
-domínio de SQL além do CRUD básico (agregações, joins, filtros por data).
-"""
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
@@ -36,7 +33,7 @@ def historico_produto(
     produto_id: int, dias: int = 30, db: Session = Depends(get_db)
 ):
     """Retorna o histórico de preços de um produto nos últimos N dias."""
-    limite = datetime.utcnow() - timedelta(days=dias)
+    limite = datetime.now(timezone.utc) - timedelta(days=dias)
     registros = (
         db.query(HistoricoPreco)
         .filter(
@@ -57,7 +54,7 @@ def maiores_quedas(dias: int = 30, limite: int = 10, db: Session = Depends(get_d
     Query de agregação: para cada produto, compara o preço mais antigo
     com o mais recente dentro da janela de tempo pedida.
     """
-    desde = datetime.utcnow() - timedelta(days=dias)
+    desde = datetime.now(timezone.utc) - timedelta(days=dias)
 
     subquery_primeiro = (
         db.query(
