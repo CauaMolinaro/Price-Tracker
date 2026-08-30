@@ -135,7 +135,6 @@ Python · FastAPI · SQLAlchemy · Pydantic · SQLite/PostgreSQL · pytest · Be
 
 - [ ] Autenticação (JWT) para múltiplos usuários
 - [ ] Envio real de e-mail (SMTP ou serviço tipo Resend)
-- [ ] Migrações com Alembic
 - [ ] Deploy (Render/Railway) + CI no GitHub Actions
 - [ ] Novos parsers de scraper (Amazon, Steam, Mercado Livre)
 
