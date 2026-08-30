@@ -29,4 +29,5 @@ jobs:
         run: pytest -v
 
       - name: Verificar se a aplicação importa corretamente
-        run: python -c "from app.main import app; print('OK: app importa sem erros')"
+        run: |
+          python -c "from app.main import app; print('OK: app importa sem erros')"
