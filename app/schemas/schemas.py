@@ -4,7 +4,7 @@ Mantidos separados dos modelos SQLAlchemy (boa prática: não expor o
 modelo de banco diretamente na API).
 """
 from datetime import datetime
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 
 
 # ---------- Produto ----------
@@ -53,7 +53,28 @@ class AlertaOut(BaseModel):
 
     id: int
     produto_id: int
+    usuario_id: int
     preco_alvo: float
     email: EmailStr
     disparado: bool
     criado_em: datetime
+
+
+# ---------- Usuário / Autenticação ----------
+
+class UsuarioCreate(BaseModel):
+    email: EmailStr
+    senha: str = Field(min_length=8, description="Mínimo de 8 caracteres")
+
+
+class UsuarioOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    email: EmailStr
+    criado_em: datetime
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"

@@ -3,14 +3,19 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
 from app.database import get_db
-from app.models.models import Produto
+from app.dependencies import get_current_user
+from app.models.models import Produto, Usuario
 from app.schemas.schemas import ProdutoCreate, ProdutoOut, ProdutoComHistorico
 
 router = APIRouter(prefix="/produtos", tags=["produtos"])
 
 
 @router.post("/", response_model=ProdutoOut, status_code=201)
-def criar_produto(produto: ProdutoCreate, db: Session = Depends(get_db)):
+def criar_produto(
+    produto: ProdutoCreate,
+    db: Session = Depends(get_db),
+    usuario_atual: Usuario = Depends(get_current_user),
+):
     novo = Produto(**produto.model_dump())
     db.add(novo)
     try:
@@ -44,7 +49,11 @@ def obter_produto(produto_id: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/{produto_id}", status_code=204)
-def remover_produto(produto_id: int, db: Session = Depends(get_db)):
+def remover_produto(
+    produto_id: int,
+    db: Session = Depends(get_db),
+    usuario_atual: Usuario = Depends(get_current_user),
+):
     produto = db.query(Produto).filter(Produto.id == produto_id).first()
     if not produto:
         raise HTTPException(status_code=404, detail="Produto não encontrado")
