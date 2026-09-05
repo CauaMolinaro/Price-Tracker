@@ -11,7 +11,7 @@ from alembic import context
 sys.path.insert(0, os.getcwd())
 
 from app.database import Base, DATABASE_URL  # noqa: E402
-from app.models.models import Produto, HistoricoPreco, Alerta  # noqa: E402,F401
+from app.models.models import Usuario, Produto, HistoricoPreco, Alerta  # noqa: E402,F401
 
 # Objeto de configuração do Alembic, acessa os valores do alembic.ini
 config = context.config
@@ -36,6 +36,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        render_as_batch=True
     )
 
     with context.begin_transaction():
@@ -51,7 +52,8 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(connection=connection,
+                          target_metadata=target_metadata, render_as_batch=True)
 
         with context.begin_transaction():
             context.run_migrations()

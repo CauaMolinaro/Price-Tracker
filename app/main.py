@@ -1,11 +1,5 @@
 from fastapi import FastAPI
-
-from app.database import Base, engine
 from app.routers import produtos, precos, alertas, auth
-
-# Cria as tabelas automaticamente se não existirem.
-# Em produção, prefira usar Alembic para migrações versionadas.
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Price Tracker API",

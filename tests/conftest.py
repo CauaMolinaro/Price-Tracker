@@ -43,3 +43,21 @@ def client(db_session):
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+    
+
+@pytest.fixture()
+def auth_headers(client):
+    """
+    Registra um usuário de teste, faz login e devolve o header
+    Authorization pronto pra usar nas rotas protegidas.
+    """
+    client.post(
+        "/auth/registrar",
+        json={"email": "teste@exemplo.com", "senha": "senha12345"},
+    )
+    resposta = client.post(
+        "/auth/login",
+        data={"username": "teste@exemplo.com", "password": "senha12345"},
+    )
+    token = resposta.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
